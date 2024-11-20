@@ -1,0 +1,39 @@
+CHIP DecoderSegment201872789 {
+    IN A, B, C, D;
+    OUT d;
+
+    PARTS:
+    // Terms from the simplified Boolean expression
+
+    // (B & C)
+    And(a=B, b=C, out=term1);
+
+    // (A & ~D)
+    Not(in=D, out=notD);
+    And(a=A, b=notD, out=term2);
+
+    // (C & ~A)
+    Not(in=A, out=notA);
+    And(a=C, b=notA, out=term3);
+
+    // (~B & ~D)
+    Not(in=B, out=notB);
+    And(a=notB, b=notD, out=term4);
+
+    // (B & D & ~A)
+    And(a=B, b=D, out=temp1);
+    And(a=temp1, b=notA, out=term5);
+
+    // (A & ~B & ~C)
+    Not(in=B, out=notB);
+    Not(in=C, out=notC);
+    And(a=A, b=notB, out=temp2);
+    And(a=temp2, b=notC, out=term6);
+
+    // Combine all terms into d
+    Or(a=term1, b=term2, out=temp3);
+    Or(a=temp3, b=term3, out=temp4);
+    Or(a=temp4, b=term4, out=temp5);
+    Or(a=temp5, b=term5, out=temp6);
+    Or(a=temp6, b=term6, out=d);
+}
